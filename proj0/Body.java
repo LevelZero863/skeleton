@@ -1,11 +1,11 @@
 public class Body{
-	public double xxPos;
-	public double yyPos;
-	public double xxVel;
-	public double yyVel;
-	public double mass;
-	public String imgFileName;
-	private static final G = 6.67e-11;
+	private double xxPos;
+	private double yyPos;
+	private double xxVel;
+	private double yyVel;
+	private double mass;
+	private String imgFileName;
+	private static final double G = 6.67e-11;
 
 	public Body(double xP,double yP,double xV,double yV,double m,String img){
 		xxPos = xP;
@@ -24,20 +24,24 @@ public class Body{
 		this.imgFileName = new String(b.imgFileName);
 	}
 	public double calcDistance(Body supply){
-		double twoDistance = Math.sqrt(this.yyPos-supply.yyPos)+Math.sqrt(this.xxPos-supply.xxPos);
+		double xmin = this.xxPos-supply.xxPos;
+		double ymin = this.yyPos-supply.yyPos;
+		if(xmin<0)	xmin=-xmin;
+		if(ymin<0)  ymin=-ymin;
+		double twoDistance = Math.pow(xmin,2)+Math.pow(ymin,2);
 		return Math.pow(twoDistance,0.5);
 	}
-	public double calcForceExertdedBy(Body supply){
+	public double calcForceExertedBy(Body supply){
 		return G*(this.mass*supply.mass)/Math.pow(this.calcDistance(supply),2);
 	}
-	public double calcForceExertdedByX(Body supply){
-		double F = this.calcForceExertdedBy(supply);
+	public double calcForceExertedByX(Body supply){
+		double F = this.calcForceExertedBy(supply);
 		double dx = supply.xxPos-this.xxPos;
 		double r = this.calcDistance(supply);
 		return F*dx/r;
 	}
-	public double calcForceExertdedByY(Body supply){
-		double F = this.calcForceExertdedBy(supply);
+	public double calcForceExertedByY(Body supply){
+		double F = this.calcForceExertedBy(supply);
 		double dx = supply.yyPos-this.yyPos;
 		double r = this.calcDistance(supply);
 		return F*dx/r;	
@@ -46,7 +50,7 @@ public class Body{
 		double NetFx=0;
 		for (Body item : allbodys){
 			if(!this.equals(item)){
-				NetFx += this.calcForceExertdedByX(item);
+				NetFx += this.calcForceExertedByX(item);
 			}
 		}
 		return NetFx;
@@ -55,20 +59,20 @@ public class Body{
 		double NetFy=0;
 		for (Body item : allbodys){
 			if(!this.equals(item)){
-				NetFy += this.calcForceExertdedByY(item);
+				NetFy += this.calcForceExertedByY(item);
 			}
 		}
-		return NetFx;
+		return NetFy;
 	}
 	public void update(double dt,double fx,double fy){
 		double ax = fx/this.mass;
-		double ay = fy/this.amss;
+		double ay = fy/this.mass;
 		double newxVel = this.xxVel+dt*ax;
 		double newyVel = this.yyVel+dt*ay;
-		double newPos = this.xxPos+dt*newxVel;
-		double newPos = this.yyPos+dt*newyVel;
-		this.xxPos = newxVel;
-		this.yyPos = newyVel;
+		double newxPos = this.xxPos+dt*newxVel;
+		double newyPos = this.yyPos+dt*newyVel;
+		this.xxPos = newxPos;
+		this.yyPos = newyPos;
 	}
 
 }
