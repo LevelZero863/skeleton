@@ -1,10 +1,10 @@
 public class Body{
-	private double xxPos;
-	private double yyPos;
-	private double xxVel;
-	private double yyVel;
-	private double mass;
-	private String imgFileName;
+	public double xxPos;
+	public double yyPos;
+	public double xxVel;
+	public double yyVel;
+	public double mass;
+	public String imgFileName;
 	private static final double G = 6.67e-11;
 
 	public Body(double xP,double yP,double xV,double yV,double m,String img){
@@ -71,8 +71,13 @@ public class Body{
 		double newyVel = this.yyVel+dt*ay;
 		double newxPos = this.xxPos+dt*newxVel;
 		double newyPos = this.yyPos+dt*newyVel;
+		this.xxVel = newxVel;
+		this.yyVel = newyVel;
 		this.xxPos = newxPos;
 		this.yyPos = newyPos;
 	}
-
+	public void draw(){
+		//StdDraw.enableDoubleBuffering();
+		StdDraw.picture(xxPos,yyPos,"E:/allCodes/skeleton/proj0/images/"+imgFileName);
+	}
 }
